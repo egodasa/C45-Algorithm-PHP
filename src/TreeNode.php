@@ -311,8 +311,8 @@ class TreeNode
 		
 		if(!is_null($parent))
 		{
-		    $data['from'] = $data['id'];
-		    $data['to'] = $parent;
+		    $data['from'] = $parent;
+		    $data['to'] = $data['id'];
 		}
 		
 		if(!empty($line_text))
