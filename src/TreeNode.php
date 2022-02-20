@@ -297,6 +297,52 @@ class TreeNode
 
 		return $data;
 	}
+	
+	// $tree harus berupa hasil fungsi toArrayVisualize
+	// fungsi ini untuk mempermudah menampilkan pohon keputusan ke library VisJS
+	public function getEdges($tree)
+    {
+        if(!empty($tree['from']) && !empty($tree['to']))
+        {
+            $results = [[
+                "from" => $tree['from'],
+                "to" => $tree['to'],
+                "label" => $tree['line_text'],
+            ]];
+        }
+        else
+        {
+            $results = [];
+        }
+        
+        if(!empty($tree['child']))
+        {
+            foreach($tree['child'] as $child)
+            {
+                $results = array_merge(getEdges($child), $results);
+            }
+        }
+        return $results;
+    }
+    
+    // $tree harus berupa hasil fungsi toArrayVisualize
+	// fungsi ini untuk mempermudah menampilkan pohon keputusan ke library VisJS
+    public function getNodes($tree)
+    {
+        $results = [[
+            "id" => $tree['id'],
+            "label" => $tree['label'],
+        ]];
+        
+        if(!empty($tree['child']))
+        {
+            foreach($tree['child'] as $child)
+            {
+                $results = array_merge(getNodes($child), $results);
+            }
+        }
+        return $results;
+    }
 
 	/**
 	 * 
