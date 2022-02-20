@@ -252,13 +252,58 @@ class TreeNode
 		return $data;
 	}
 	
+	
+	// untuk mempermudah membuat edges di library VisJS
+	function getEdges($tree)
+    {
+        if(!empty($tree['from']) && !empty($tree['to']))
+        {
+            $results = [[
+                "from" => $tree['from'],
+                "to" => $tree['to'],
+                "label" => $tree['line_text'],
+            ]];
+        }
+        else
+        {
+            $results = [];
+        }
+        
+        if(!empty($tree['child']))
+        {
+            foreach($tree['child'] as $child)
+            {
+                $results = array_merge($this->getEdges($child), $results);
+            }
+        }
+        return $results;
+    }
+    
+    // untuk mempermudah membuat nodes di library VisJS
+    function getNodes($tree)
+    {
+        $results = [[
+            "id" => $tree['id'],
+            "label" => $tree['label'],
+        ]];
+        
+        if(!empty($tree['child']))
+        {
+            foreach($tree['child'] as $child)
+            {
+                $results = array_merge($this->getNodes($child), $results);
+            }
+        }
+        return $results;
+    }
+	
 	/**
 	 * 
 	 * Draw tree with array with additional data. Good for visualize array with vis.js
 	 * 
 	 * @return array
 	 */
-	public function toArrayVisualize($parent = null, $line_text = "", $nilai = 0)
+	public function getTree($parent = null, $line_text = "", $nilai = 0)
 	{
 		$data = [];
 		$data['label'] = $this->attribute;
@@ -289,7 +334,7 @@ class TreeNode
     			{
     				if ($value instanceof self)
     				{
-    					$data['child'][] = $value->toArrayVisualize($data['id'], $key, $this->getInstanceCountAsString($key));
+    					$data['child'][] = $value->getTree($data['id'], $key, $this->getInstanceCountAsString($key));
     				}
     			}
     		}
@@ -297,52 +342,6 @@ class TreeNode
 
 		return $data;
 	}
-	
-	// $tree harus berupa hasil fungsi toArrayVisualize
-	// fungsi ini untuk mempermudah menampilkan pohon keputusan ke library VisJS
-	public function getEdges($tree)
-    {
-        if(!empty($tree['from']) && !empty($tree['to']))
-        {
-            $results = [[
-                "from" => $tree['from'],
-                "to" => $tree['to'],
-                "label" => $tree['line_text'],
-            ]];
-        }
-        else
-        {
-            $results = [];
-        }
-        
-        if(!empty($tree['child']))
-        {
-            foreach($tree['child'] as $child)
-            {
-                $results = array_merge(getEdges($child), $results);
-            }
-        }
-        return $results;
-    }
-    
-    // $tree harus berupa hasil fungsi toArrayVisualize
-	// fungsi ini untuk mempermudah menampilkan pohon keputusan ke library VisJS
-    public function getNodes($tree)
-    {
-        $results = [[
-            "id" => $tree['id'],
-            "label" => $tree['label'],
-        ]];
-        
-        if(!empty($tree['child']))
-        {
-            foreach($tree['child'] as $child)
-            {
-                $results = array_merge(getNodes($child), $results);
-            }
-        }
-        return $results;
-    }
 
 	/**
 	 * 
