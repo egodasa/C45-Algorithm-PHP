@@ -1,5 +1,7 @@
 # C45 Algorithm - PHP Language
 
+# Modifikasi untuk mempermudah visualisasi ke library VisJs
+
 > [**Use Example File**](example.xlsx)
 
 ## Installation
@@ -24,6 +26,7 @@ $initialize = $c45->initialize(); // initialize
 $buildTree = $initialize->buildTree(); // build tree
 
 $arrayTree = $buildTree->toArray(); // set to array
+$arrayTreeVisJs = $buildTree->toArrayVisualize(); // atur array sedemikian rupa agar mudah di implementasikan ke visjs
 $stringTree = $buildTree->toString(); // set to string
 
 echo "<pre>";
