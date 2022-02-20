@@ -18,41 +18,23 @@ composer require medansoftware/c45-algorithm-php
 composer dump-autoload
 ```
 
-## Setup
+## Example 
 
 ```php
 $c45 = new Algorithm\C45('example.xlsx', 'PLAY');
 $initialize = $c45->initialize(); // initialize
-$buildTree = $initialize->buildTree(); // build tree
+$buildTree = $initialize->buildTree();
+    
+$tree = $buildTree->getTree();
 
-$arrayTree = $buildTree->toArray(); // set to array
-$arrayTreeVisJs = $buildTree->toArrayVisualize(); // atur array sedemikian rupa agar mudah di implementasikan ke visjs
-$stringTree = $buildTree->toString(); // set to string
-
-echo "<pre>";
-print_r ($arrayTree);
-echo "</pre>";
-
-echo $stringTree;
-```
-or 
-
-```php
-$c45 = new Algorithm\C45();
-$c45->loadFile('example.xlsx'); // load example file
-$c45->setTargetAttribute('PLAY'); // set target attribute
-
-$initialize = $c45->initialize(); // initialize
-$buildTree = $initialize->buildTree(); // build tree
-
-$arrayTree = $buildTree->toArray(); // set to array
-$stringTree = $buildTree->toString(); // set to string
+// nodes and edges can be implemented to VisJS directly
+$nodes = $buildTree->getNodes($tree);
+$edges = $buildTree->getEdges($tree);
 
 echo "<pre>";
-print_r ($arrayTree);
+print_r ($tree);
 echo "</pre>";
 
-echo $stringTree;
 ```
 
 ## Other Examples
