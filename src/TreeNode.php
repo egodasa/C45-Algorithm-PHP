@@ -10,6 +10,8 @@ class TreeNode
 	 * @var Algorithm\C45\TreeNode
 	 */
 	protected $parent;
+	
+	private $id = [];
 
 	/**
 	 * attribute name
@@ -36,7 +38,19 @@ class TreeNode
 	 * @var boolean
 	 */
 	protected $is_leaf;
-
+    
+    private function randomNumber($start, $end)
+    {
+        
+        $number = rand($start, $end);
+        if(in_array($number, $this->id))
+        {
+            return randomNumber($start, $end);
+        }
+        
+        return $number;
+    }
+    
 	/**
 	 * Set parent
 	 * 
@@ -223,15 +237,62 @@ class TreeNode
 	{
 		$data = [];
 		$data['attribute'] = $this->attribute;
+		$data['id'] = $this->randomNumber(1, 1000);
 		foreach ($this->values as $key => $value)
 		{
-			if (!is_null($value))
+			if (!is_null($value) && !empty($key))
 			{
 				if ($value instanceof self)
 				{
 					$data['values'][$key] = $value->toArray();
 				}
 			}
+		}
+
+		return $data;
+	}
+	
+	/**
+	 * 
+	 * Draw tree with array with additional data. Good for visualize array with vis.js
+	 * 
+	 * @return array
+	 */
+	public function toArrayVisualize($parent = null, $line_text = "", $nilai = 0)
+	{
+		$data = [];
+		$data['label'] = $this->attribute;
+		$data['id'] = $this->randomNumber(1, 1000);
+		
+		if(!is_null($parent))
+		{
+		    $data['from'] = $data['id'];
+		    $data['to'] = $parent;
+		}
+		
+		if(!empty($line_text))
+		{
+		    if(!empty($nilai))
+    		{
+    		   $data['label'] .= "\n".$nilai; 
+    		}
+    		
+		    $data['line_text'] = $line_text;
+		}
+		
+		if(!empty($this->values))
+		{
+		    $data['child'] = [];
+    		foreach ($this->values as $key => $value)
+    		{
+    			if (!is_null($value) && !empty($key))
+    			{
+    				if ($value instanceof self)
+    				{
+    					$data['child'][] = $value->toArrayVisualize($data['id'], $key, $this->getInstanceCountAsString($key));
+    				}
+    			}
+    		}
 		}
 
 		return $data;
@@ -247,6 +308,7 @@ class TreeNode
 	{
 		$data = [];
 		$data['attribute'] = $this->attribute;
+		$data['id'] = $this->randomNumber(1, 1000);
 		foreach ($this->values as $key => $value)
 		{
 			if (!is_null($value))
